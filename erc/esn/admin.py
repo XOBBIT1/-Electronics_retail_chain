@@ -1,3 +1,4 @@
 from django.contrib import admin
+from esn.models import Factory, Distributor, Dealership, LargeRetailChain, IndividualEntrepreneur
 
-# Register your models here.
+admin.site.register([Factory, Distributor, Dealership, LargeRetailChain, IndividualEntrepreneur])
