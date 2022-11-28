@@ -15,11 +15,15 @@ class Factory(models.Model):
         "products.Product", related_name="product_factory", null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    employees = models.CharField(max_length=256, null=False, blank=False)
+    employees = models.CharField(max_length=50, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Завод"
 
 
 class Distributor(models.Model):
-    name = models.CharField(max_length=256, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
     contacts = models.ForeignKey(
         Contacts,
         related_name="contacts_distributor",
@@ -38,11 +42,15 @@ class Distributor(models.Model):
         "products.Product", related_name="product_distributor", null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    employees = models.CharField(max_length=256, null=False, blank=False)
+    employees = models.CharField(max_length=50, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Дистрибьютор"
 
 
 class Dealership(models.Model):
-    name = models.CharField(max_length=256, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
     contacts = models.ForeignKey(
         Contacts,
         related_name="contacts_dealership",
@@ -61,11 +69,15 @@ class Dealership(models.Model):
         "products.Product", related_name="product_dealership", null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    employees = models.CharField(max_length=256, null=False, blank=False)
+    employees = models.CharField(max_length=50, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Дилерский центр"
 
 
 class LargeRetailChain(models.Model):
-    name = models.CharField(max_length=256, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
     contacts = models.ForeignKey(
         Contacts,
         related_name="contacts_lrc",
@@ -84,11 +96,15 @@ class LargeRetailChain(models.Model):
         "products.Product", related_name="product_lrc", null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    employees = models.CharField(max_length=256, null=False, blank=False)
+    employees = models.CharField(max_length=50, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Крупная розничная сеть"
 
 
 class IndividualEntrepreneur(models.Model):
-    name = models.CharField(max_length=256, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
     contacts = models.ForeignKey(
         Contacts,
         related_name="contacts_ie",
@@ -107,4 +123,7 @@ class IndividualEntrepreneur(models.Model):
         null=True,
         blank=True,
     )
-    employees = models.CharField(max_length=256, null=False, blank=False)
+    employees = models.CharField(max_length=50, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Индивидуальный предприниматель"

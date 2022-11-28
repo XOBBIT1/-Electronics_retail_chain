@@ -9,6 +9,7 @@ django = "*"
 drf-spectacular = "*"
 drf-yasg = "*"
 django-rest-swagger = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
