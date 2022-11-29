@@ -26,6 +26,7 @@ class DebtObjectView(views.APIView):
 class AllNetObjects(generics.ListAPIView):
     serializer_class = ObjectSerializer
 
-    def get_queryset(self):
-        queryset = ObjectModel.objects.all().select_related('contacts__address',).only('contacts__address__country')
-        return queryset
+    def get(self, *args, **kwargs):
+        country_name = kwargs.get("country")
+        queryset = ObjectModel.objects.filter(contacts__address__country=country_name)
+        return Response(self.serializer_class(queryset, many=True).data, status=status.HTTP_200_OK)

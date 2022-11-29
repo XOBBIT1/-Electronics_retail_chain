@@ -15,8 +15,8 @@ class Contacts(models.Model):
     email = models.EmailField(
         max_length=256, unique=True, null=False, db_index=True, blank=False
     )
-    address = models.ForeignKey(
-        Address,
+    address = models.OneToOneField(
+        "Address",
         related_name="address",
         on_delete=models.CASCADE,
         null=True,

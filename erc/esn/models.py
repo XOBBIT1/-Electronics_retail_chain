@@ -1,13 +1,12 @@
 from django.db import models
-from contacts.models import Contacts
 from erc.settings import OBJECT_CHOICES
 
 
 class ObjectModel(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
-    contacts = models.ForeignKey(
-        Contacts,
+    contacts = models.OneToOneField(
+        "contacts.Contacts",
         related_name="contacts",
         on_delete=models.CASCADE,
         null=True,

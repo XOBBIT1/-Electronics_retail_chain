@@ -11,6 +11,7 @@ drf-yasg = "*"
 django-rest-swagger = "*"
 psycopg2 = "*"
 python-dotenv = "*"
+celery = "*"
 
 [dev-packages]
 
