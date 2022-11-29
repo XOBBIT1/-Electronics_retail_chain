@@ -8,7 +8,7 @@ class Address(models.Model):
     house_number = models.CharField(max_length=256, null=True, blank=False)
 
     class Meta:
-        verbose_name = " Адрес"
+        verbose_name = "Address"
 
 
 class Contacts(models.Model):
@@ -24,4 +24,4 @@ class Contacts(models.Model):
     )
 
     class Meta:
-        verbose_name = "Контакты"
+        verbose_name = "Contacts"
