@@ -1,8 +1,10 @@
 from django.db.models import Avg, F
+from rest_framework import generics, views, status, viewsets
+from rest_framework.response import Response
+from esn.tasks import updating_debt_task
+
 from esn.models import ObjectModel
 from esn.api.serializers.esn import ObjectSerializer
-from rest_framework import generics, viewsets, views, status
-from rest_framework.response import Response
 
 
 class ObjectView(viewsets.ModelViewSet):
@@ -16,10 +18,11 @@ class DebtObjectView(views.APIView):
     def get(self, request):
         debt_awg = ObjectModel.objects.all().aggregate(Avg(F('debt')))
         all_data = ObjectModel.objects.filter(debt__gt=debt_awg['debt__avg'])
+        updating_debt_task.delay()
 
         serializer = self.serializer_class(all_data, many=True)
-
         serializer_data = serializer.data
+
         return Response(serializer_data, status=status.HTTP_200_OK)
 
 

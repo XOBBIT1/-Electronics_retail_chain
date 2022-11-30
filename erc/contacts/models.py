@@ -1,8 +1,10 @@
 from django.db import models
 
+from django_countries.fields import CountryField
+
 
 class Address(models.Model):
-    country = models.CharField(max_length=256, null=False, blank=False)
+    country = CountryField()
     city = models.CharField(max_length=256, blank=False, null=False)
     street = models.CharField(max_length=256, null=True, blank=False)
     house_number = models.CharField(max_length=256, null=True, blank=False)

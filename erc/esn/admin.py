@@ -3,8 +3,8 @@ from django.contrib import admin
 from esn.models import ObjectModel
 
 
-async def reset_debt(modeladmin, request, queryset):
-    await queryset.update(debt=0)
+def reset_debt(modeladmin, request, queryset):
+    return queryset.update(debt=0)
 
 
 @admin.register(ObjectModel)

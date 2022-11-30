@@ -150,6 +150,11 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': (
+    #     'rest_framework.filters.SearchFilter',
+    #     'rest_framework.filters.OrderingFilter',
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    # ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
@@ -166,9 +171,9 @@ OBJECT_CHOICES = (
 
 REDIS_HOST = os.environ["REDIS_HOST"]
 REDIS_PORT = os.environ["REDIS_PORT"]
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': os.environ["CELERY_BROKER_TRANSPORT_OPTIONS"]}
-CELERY_ACCEPT_CONTENT = [os.environ["CELERY_ACCEPT_CONTENT"]]
-CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
-CELERY_RESULT_SERIALIZER = os.environ["CELERY_RESULT_SERIALIZER"]
-CELERY_TASK_SERIALIZER = os.environ["CELERY_TASK_SERIALIZER"]
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"

@@ -12,6 +12,9 @@ django-rest-swagger = "*"
 psycopg2 = "*"
 python-dotenv = "*"
 celery = "*"
+django-countries = "*"
+django-filter = "*"
+redis = "*"
 
 [dev-packages]
 

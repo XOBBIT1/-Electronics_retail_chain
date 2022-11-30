@@ -1,5 +1,6 @@
 from django.db import models
 from erc.settings import OBJECT_CHOICES
+from esn.validator import validate_even
 
 
 class ObjectModel(models.Model):
@@ -15,6 +16,7 @@ class ObjectModel(models.Model):
     type = models.CharField(max_length=20,
                             choices=OBJECT_CHOICES,
                             default="FACTORY")
+    provider = models.OneToOneField('self', on_delete=models.CASCADE, null=True, blank=True, validators=[validate_even])
     product = models.ManyToManyField(
         "products.Product", related_name="product", null=True
     )
