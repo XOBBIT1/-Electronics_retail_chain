@@ -10,7 +10,7 @@ def reset_debt(modeladmin, request, queryset):
 @admin.register(ObjectModel)
 class ObjectModelAdmin(admin.ModelAdmin):
     list_display = ("name", "debt", "type")
-    list_filter = ("name", "debt", "type")
+    list_filter = ("contacts__address__city",)
     search_fields = ("name", "debt", "type")
     readonly_fields = ("debt",)
     actions = [reset_debt]
