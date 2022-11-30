@@ -5,5 +5,5 @@ from products.models import Product
 
 
 class ProductView(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().filter(name__gt=10)
     serializer_class = ProductSerializer

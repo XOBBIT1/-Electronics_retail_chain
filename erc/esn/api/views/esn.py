@@ -8,7 +8,7 @@ from esn.api.serializers.esn import ObjectSerializer
 
 
 class ObjectView(viewsets.ModelViewSet):
-    queryset = ObjectModel.objects.all()
+    queryset = ObjectModel.objects.all().filter(name__gt=10)
     serializer_class = ObjectSerializer
 
 
