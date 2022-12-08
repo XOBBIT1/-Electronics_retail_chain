@@ -1,4 +1,4 @@
-"""erc URL Configuration
+"""config URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -25,9 +25,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     path("", include("esn.urls")),
-    path("contacts", include("contacts.urls")),
-    path("products", include("products.urls")),
-    path("employees", include("employees.urls")),
 
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(), name="swagger-ui"),

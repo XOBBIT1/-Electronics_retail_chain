@@ -15,6 +15,7 @@ celery = "*"
 django-countries = "*"
 django-filter = "*"
 redis = "*"
+django-admin-relation-links = "*"
 
 [dev-packages]
 
