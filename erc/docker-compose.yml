@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:latest
+    container_name: rd01
+    restart: always
+    ports:
+      - '6379:6379'
+
+  db:
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=erc
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - '5432:5432'
+
+  web:
+    container_name: erc
+    build:
+      context: ""
+      dockerfile: Dockerfile
+    command:  bash -c "python /erc/manage.py migrate --noinput &&
+              python /erc/manage.py  runserver 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+#  worker:
+#    restart: always
+#    build:
+#      context: ""
+#      dockerfile: Dockerfile
+#    volumes:
+#      - ./celery_erc:./esn
+#    command: ['celery', 'workdir=./esn', '-A', 'config', 'worker']
+
+volumes:
+  postgres_data:
