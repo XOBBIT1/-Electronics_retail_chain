@@ -10,8 +10,12 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    "send-spam-every-3-hours": {
+    "update-debt-every-2-minutes": {
         'task': 'esn.tasks.updating_debt_task',
-        'schedule': crontab(minute='*/3')
+        'schedule': crontab(minute='*/2')
+    },
+    "reduce-debt-every-2-minutes": {
+        'task': 'esn.tasks.reduce_debt_task',
+        'schedule': crontab(hour='6', minute='30')
     }
 }

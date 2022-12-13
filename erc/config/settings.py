@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     "products",
     "rest_framework",
     "drf_spectacular",
-    "employees"
+    "employees",
+    'django_celery_beat',
+    "debug_toolbar",
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -92,7 +96,7 @@ DATABASES = {
         "NAME": os.environ["POSTGRES_NAME"],
         "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "HOST": os.environ["POSTGRES_HOST"],
+        "HOST": "localhost",
         "PORT": os.environ["POSTGRES_PORT"],
     }
 }
@@ -170,7 +174,7 @@ OBJECT_CHOICES = (
     ("IE", "Individual_entrepreneur"),
 )
 
-REDIS_HOST = os.environ["REDIS_HOST"]
+REDIS_HOST = "127.0.0.1"
 REDIS_PORT = os.environ["REDIS_PORT"]
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
@@ -182,3 +186,19 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TASK_TRACK_STARTED = True
+
+
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+}

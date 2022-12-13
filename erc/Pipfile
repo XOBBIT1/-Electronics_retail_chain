@@ -16,6 +16,13 @@ django-countries = "*"
 django-filter = "*"
 redis = "*"
 django-admin-relation-links = "*"
+gevent = "*"
+django-celery-beat = "*"
+tzdata = "*"
+pytz = "*"
+qrcode = "*"
+image = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

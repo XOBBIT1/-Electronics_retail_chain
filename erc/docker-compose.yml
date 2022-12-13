@@ -4,7 +4,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: rd01
+    container_name: redis
     restart: always
     ports:
       - '6379:6379'
@@ -21,7 +21,7 @@ services:
       - '5432:5432'
 
   web:
-    container_name: erc
+    container_name: web
     build:
       context: ""
       dockerfile: Dockerfile
@@ -34,14 +34,32 @@ services:
     depends_on:
       - db
 
-#  worker:
-#    restart: always
-#    build:
-#      context: ""
-#      dockerfile: Dockerfile
-#    volumes:
-#      - ./celery_erc:./esn
-#    command: ['celery', 'workdir=./esn', '-A', 'config', 'worker']
+  worker:
+    restart: always
+    build: .
+    command: ['celery', '-A', 'config', 'worker', '-l', 'info', '-P', 'gevent']
+    volumes:
+      - .:/esn
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - web
+
+  celery_beat:
+    restart: always
+    build: .
+    command: [ 'celery', '-A', 'config', 'beat', '-l', 'info', "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+    volumes:
+      - .:/esn
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - web
+      - worker
 
 volumes:
   postgres_data:

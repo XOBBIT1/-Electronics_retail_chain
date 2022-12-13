@@ -24,33 +24,26 @@ class ObjectView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateMo
 
 
 class DeleteObjectView(generics.RetrieveDestroyAPIView):
-    queryset = ObjectModel.objects.all().filter(name__gt=10)
+    queryset = ObjectModel.objects.all()
     serializer_class = ObjectSerializer
     permission_classes = (IsAuthenticated,)
 
 
 class UpdateObjectView(generics.GenericAPIView, mixins.UpdateModelMixin):
-    queryset = ObjectModel.objects.all().filter(name__gt=10)
+    queryset = ObjectModel.objects.all()
     permission_classes = (IsAuthenticated,)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    def patch(self, request, pk):
-        snippet = ObjectModel.objects.get(pk=pk)
-        snippet.debt = random.randint(5, 500)
-        serializer = ObjectSerializer(snippet, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_200_OK)
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 class DebtObjectView(views.APIView):
     serializer_class = ObjectSerializer
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        tasks.updating_debt_task.delay()
         try:
             debt_awg = ObjectModel.objects.all().aggregate(Avg(F('debt')))
             all_data = ObjectModel.objects.all().filter(debt__gt=debt_awg['debt__avg'])
@@ -82,3 +75,14 @@ class ProductObjects(generics.ListAPIView):
         country_name = kwargs.get("product")
         queryset = ObjectModel.objects.filter(product__name=country_name)
         return Response(self.serializer_class(queryset, many=True).data, status=status.HTTP_200_OK)
+
+
+class SendEmailView(generics.ListAPIView):
+    serializer_class = ObjectSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, *args, **kwargs):
+        queryset = ObjectModel.objects.all()
+        serializer = self.serializer_class(queryset, many=True).data
+        tasks.send_email_task.delay(serializer)
+        return Response(f"Email was sent with data :{serializer}", status=status.HTTP_200_OK)

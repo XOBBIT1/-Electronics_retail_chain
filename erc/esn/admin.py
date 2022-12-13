@@ -1,10 +1,10 @@
 import asyncio
 from django.contrib import admin
 from esn.models import ObjectModel
-
+from .tasks import reset_debt_task
 
 def reset_debt(modeladmin, request, queryset):
-    return queryset.update(debt=0)
+    return reset_debt_task(queryset)
 
 
 class ObjectModelInline(admin.TabularInline):
