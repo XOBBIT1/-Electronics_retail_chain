@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cab776da11e9c9089e3212e8ad00029072fee9cc34b7ae93638f6d4d40bc757d"
+            "sha256": "2f780e8dc5f2e78773a560bc352f06d06b2f820c6a0f28e87daa0e557776bee0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -251,12 +251,13 @@
             "version": "==7.5"
         },
         "django-debug-toolbar": {
+            "editable": true,
+            "git": "https://github.com/django-debug-toolbar/django-debug-toolbar.git",
             "hashes": [
                 "sha256:24ef1a7d44d25e60d7951e378454c6509bf536dce7e7d9d36e7c387db499bc27",
                 "sha256:879f8a4672d41621c06a4d322dcffa630fc4df056cada6e417ed01db0e5e0478"
             ],
-            "index": "pypi",
-            "version": "==3.8.1"
+            "ref": "19f1cf31b4bb8376ca8121efc68d6b423cefe8f0"
         },
         "django-filter": {
             "hashes": [

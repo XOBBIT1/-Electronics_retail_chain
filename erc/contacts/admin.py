@@ -14,5 +14,3 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ("country", "city", "street", "house_number")
     list_filter = ("country", "city", "street", "house_number")
     search_fields = ("country", "city", "street", "house_number")
-
-

@@ -3,6 +3,7 @@ from django.contrib import admin
 from esn.models import ObjectModel
 from .tasks import reset_debt_task
 
+
 def reset_debt(modeladmin, request, queryset):
     return reset_debt_task(queryset)
 

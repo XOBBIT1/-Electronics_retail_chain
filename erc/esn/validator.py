@@ -3,11 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 def validate_even(value):
-    if value == "Factory":
-        value = 0
-        raise ValidationError(
-            _('%(value)s is not an even number'),
-            params={'value': value},
-        )
-    else:
-        value += 1
+    value = 0
+    raise ValidationError(
+        _("%(value)s is not an even number"),
+        params={"value": value},
+    )
