@@ -4,6 +4,8 @@ import getpass
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.mime.text import MIMEText
+
+
 def email(queryset):
 
     password = getpass.getpass("Enter your password: ")
@@ -23,7 +25,6 @@ def email(queryset):
 
         msg.attach(msg_ready)
         msg.attach(image)
-
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as mail:
         mail.login(sender, password)

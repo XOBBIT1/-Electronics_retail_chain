@@ -18,10 +18,10 @@ class ObjectSerializer(serializers.ModelSerializer):
         ]
         read_only = ["debt"]
 
-class ContectsSerializer(serializers.ModelSerializer):
 
+class ContectsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contacts
         fields = [
-           "email",
+            "email",
         ]

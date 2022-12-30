@@ -18,15 +18,16 @@ class ObjectView(
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-class ObjectPostView(
-    generics.GenericAPIView, mixins.CreateModelMixin
-):
+
+
+class ObjectPostView(generics.GenericAPIView, mixins.CreateModelMixin):
 
     queryset = ObjectModel.objects.filter(name__gt=10)
     serializer_class = ObjectSerializer
     # permission_classes = (IsAuthenticated,)
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
 
 class DeleteObjectView(mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = ObjectModel.objects.all()
@@ -102,14 +103,11 @@ class SendEmailView(generics.ListAPIView):
             f"Email was sent with data :{serializer}", status=status.HTTP_200_OK
         )
 
+
 class GetAllContactsView(views.APIView):
     serializer_class = ContectsSerializer
+
     @staticmethod
     def get(request):
-        output = [{
-          "email": output.email
-          for output in Contacts.objects.all()
-        }]
-        return Response(
-               output, status=status.HTTP_200_OK
-        )
+        output = [{"email": output.email for output in Contacts.objects.all()}]
+        return Response(output, status=status.HTTP_200_OK)
