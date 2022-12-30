@@ -23,6 +23,10 @@ qrcode = "*"
 image = "*"
 celery = "*"
 django-debug-toolbar = {editable = true, git = "https://github.com/django-debug-toolbar/django-debug-toolbar.git"}
+django-cors-headers = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-drf = "*"
 
 [dev-packages]
 

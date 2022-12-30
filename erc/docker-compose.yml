@@ -20,8 +20,8 @@ services:
     ports:
       - '5432:5432'
 
-  web:
-    container_name: web
+  backend:
+    container_name: backend
     build:
       context: ""
       dockerfile: Dockerfile
@@ -34,6 +34,14 @@ services:
     depends_on:
       - db
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ""
+      dockerfile: front/Dockerfile
+    ports:
+      - '3000:3000'
+
   worker:
     restart: always
     build: .
@@ -45,7 +53,7 @@ services:
     depends_on:
       - redis
       - db
-      - web
+      - backend
 
   celery_beat:
     restart: always
@@ -58,7 +66,7 @@ services:
     depends_on:
       - redis
       - db
-      - web
+      - backend
       - worker
 
 volumes:

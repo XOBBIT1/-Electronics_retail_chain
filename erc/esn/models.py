@@ -4,11 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ObjectType(models.TextChoices):
-    FACTORY = "0", _("Factory")
-    DISTRIBUTOR = "1", _("Distributor")
-    LRC = "2", _("Large_retail_chain")
-    DECEMBER = "3", _("December")
-    IE = "4", _("Individual_entrepreneur")
+    FACTORY = "FA", _("Factory")
+    DISTRIBUTOR = "DI", _("Distributor")
+    LRC = "LRC", _("Large_retail_chain")
+    DECEMBER = "DE", _("December")
+    IE = "IE", _("Individual_entrepreneur")
 
 
 class ObjectModel(models.Model):
@@ -16,19 +16,19 @@ class ObjectModel(models.Model):
     debt = models.DecimalField(max_digits=20, decimal_places=2, default=0, null=True)
     contacts = models.OneToOneField(
         "contacts.Contacts",
-        related_name="contacts",
+        related_name="objects_model",
         on_delete=models.CASCADE,
     )
     type = models.CharField(
-        max_length=20, choices=ObjectType.choices, default="FACTORY"
+        max_length=20, choices=ObjectType.choices, default=ObjectType.FACTORY
     )
     provider = models.OneToOneField(
         "self", on_delete=models.CASCADE, null=True, blank=True
     )
-    product = models.ManyToManyField("products.Product", related_name="product")
+    product = models.ManyToManyField("products.Product", related_name="objects_model")
     employees = models.ManyToManyField(
         "employees.Employees",
-        related_name="employees",
+        related_name="objects_model",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

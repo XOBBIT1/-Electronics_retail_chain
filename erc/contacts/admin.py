@@ -4,7 +4,7 @@ from contacts.models import Contacts, Address
 
 @admin.register(Contacts)
 class ContactsAdmin(admin.ModelAdmin):
-    list_display = ("email", "address")
+    list_display = ("id", "email", "address")
     list_filter = ("email", "address")
     search_fields = ("email", "address")
 

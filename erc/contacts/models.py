@@ -19,7 +19,7 @@ class Contacts(models.Model):
     )
     address = models.OneToOneField(
         "Address",
-        related_name="address",
+        related_name="contacts",
         on_delete=models.CASCADE,
         null=True,
         blank=True,

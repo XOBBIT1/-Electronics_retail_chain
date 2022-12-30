@@ -103,6 +103,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+static
 erc/.env
 .venv
 .idea
@@ -111,6 +112,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.pytest_cache
 
 # Spyder project settings
 .spyderproject
