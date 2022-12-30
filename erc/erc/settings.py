@@ -12,15 +12,22 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_file = os.path.join(BASE_DIR, ".env")
+
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-s)e39*m8#!ueiq(pz=1fxs(uygb5@6&qkvezp1g5^p-m(@&#u7"
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,6 +49,7 @@ INSTALLED_APPS = [
     "products",
     "rest_framework",
     "drf_spectacular",
+    "employees"
 ]
 
 MIDDLEWARE = [
@@ -81,11 +89,11 @@ WSGI_APPLICATION = "erc.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "erc",
-        "USER": "admin",
-        "PASSWORD": "admin",
-        "HOST": "localhost",
-        "PORT": 5432,
+        "NAME": os.environ["NAME"],
+        "USER": os.environ["USER"],
+        "PASSWORD": os.environ["PASSWORD"],
+        "HOST": os.environ["HOST"],
+        "PORT": os.environ["PORT"],
     }
 }
 
@@ -140,3 +148,27 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+    ],
+}
+
+OBJECT_CHOICES = (
+    ("FACTORY", "Factory"),
+    ("DISTRIBUTOR", "Distributor"),
+    ("LRC", "Large_retail_chain"),
+    ("DECEMBER", "December"),
+    ("IE", "Individual_entrepreneur"),
+)
+
+REDIS_HOST = os.environ["REDIS_HOST"]
+REDIS_PORT = os.environ["REDIS_PORT"]
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': os.environ["CELERY_BROKER_TRANSPORT_OPTIONS"]}
+CELERY_ACCEPT_CONTENT = [os.environ["CELERY_ACCEPT_CONTENT"]]
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
+CELERY_RESULT_SERIALIZER = os.environ["CELERY_RESULT_SERIALIZER"]
+CELERY_TASK_SERIALIZER = os.environ["CELERY_TASK_SERIALIZER"]

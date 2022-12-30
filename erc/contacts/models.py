@@ -7,6 +7,9 @@ class Address(models.Model):
     street = models.CharField(max_length=256, null=True, blank=False)
     house_number = models.CharField(max_length=256, null=True, blank=False)
 
+    class Meta:
+        verbose_name = "Address"
+
 
 class Contacts(models.Model):
     email = models.EmailField(
@@ -19,3 +22,6 @@ class Contacts(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = "Contacts"
