@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+
+  db:
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=erc
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - '5432:5432'
+
+  backend:
+    container_name: backend
+    build:
+      context: ""
+      dockerfile: Dockerfile
+    command:  bash -c "python /erc/manage.py migrate --noinput &&
+              python /erc/manage.py  runserver 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ""
+      dockerfile: front/Dockerfile
+    ports:
+      - '3000:3000'
+
+  worker:
+    restart: always
+    build: .
+    command: ['celery', '-A', 'config', 'worker', '-l', 'info', '-P', 'gevent']
+    volumes:
+      - .:/esn
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - backend
+
+  celery_beat:
+    restart: always
+    build: .
+    command: [ 'celery', '-A', 'config', 'beat', '-l', 'info', "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+    volumes:
+      - .:/esn
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - backend
+      - worker
+
+volumes:
+  postgres_data:
