@@ -9,7 +9,5 @@ class Employees(models.Model):
         Contacts,
         related_name="contacts_employee",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)

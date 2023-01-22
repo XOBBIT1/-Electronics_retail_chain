@@ -1,31 +1,113 @@
-from django.db.models import Avg, F
-from esn.models import ObjectModel
-from esn.api.serializers.esn import ObjectSerializer
-from rest_framework import generics, viewsets, views, status
+from rest_framework import generics, views, status, mixins
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from esn import tasks
+
+from esn.models import ObjectModel
+from contacts.models import Contacts
+from esn.api.serializers.esn import ObjectSerializer, ContectsSerializer
 
 
-class ObjectView(viewsets.ModelViewSet):
+class ObjectView(
+    generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
+):
+
+    queryset = ObjectModel.objects.filter(name__gt=10)
+    serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ObjectPostView(generics.GenericAPIView, mixins.CreateModelMixin):
+
+    queryset = ObjectModel.objects.filter(name__gt=10)
+    serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class DeleteObjectView(mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = ObjectModel.objects.all()
     serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class UpdateObjectView(generics.GenericAPIView, mixins.UpdateModelMixin):
+    queryset = ObjectModel.objects.all()
+    serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 class DebtObjectView(views.APIView):
     serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        debt_awg = ObjectModel.objects.all().aggregate(Avg(F('debt')))
-        all_data = ObjectModel.objects.filter(debt__gt=debt_awg['debt__avg'])
+        try:
+            serializer = self.serializer_class(
+                ObjectModel.calculate_average_debt(), many=True
+            )
+            serializer_data = serializer.data
 
-        serializer = self.serializer_class(all_data, many=True)
+            return Response(serializer_data, status=status.HTTP_200_OK)
 
-        serializer_data = serializer.data
-        return Response(serializer_data, status=status.HTTP_200_OK)
+        except Exception:
+            return Response("No data", status=status.HTTP_200_OK)
 
 
 class AllNetObjects(generics.ListAPIView):
     serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        queryset = ObjectModel.objects.all().select_related('contacts__address',).only('contacts__address__country')
-        return queryset
+    def get(self, *args, **kwargs):
+        country_name = kwargs.get("country")
+        queryset = ObjectModel.objects.filter(contacts__address__country=country_name)
+        return Response(
+            self.serializer_class(queryset, many=True).data, status=status.HTTP_200_OK
+        )
+
+
+class ProductObjects(generics.ListAPIView):
+    serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, *args, **kwargs):
+        country_name = kwargs.get("product")
+        queryset = ObjectModel.objects.filter(product__name=country_name)
+        return Response(
+            self.serializer_class(queryset, many=True).data, status=status.HTTP_200_OK
+        )
+
+
+class SendEmailView(generics.ListAPIView):
+    serializer_class = ObjectSerializer
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, *args, **kwargs):
+        queryset = ObjectModel.objects.all()
+        serializer = self.serializer_class(queryset, many=True).data
+        tasks.send_email_task.delay(serializer)
+        return Response(
+            f"Email was sent with data :{serializer}", status=status.HTTP_200_OK
+        )
+
+
+class GetAllContactsView(views.APIView):
+    serializer_class = ContectsSerializer
+
+    @staticmethod
+    def get(request):
+        output = [{"email": output.email for output in Contacts.objects.all()}]
+        return Response(output, status=status.HTTP_200_OK)
