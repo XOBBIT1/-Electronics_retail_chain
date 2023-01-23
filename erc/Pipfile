@@ -27,6 +27,7 @@ django-cors-headers = "*"
 pytest = "*"
 pytest-django = "*"
 pytest-drf = "*"
+stripe = "*"
 
 [dev-packages]
 

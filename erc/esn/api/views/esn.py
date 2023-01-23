@@ -1,12 +1,43 @@
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
 from rest_framework import generics, views, status, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from esn import tasks
+from django.views import View
 
+from esn import tasks
 from esn.models import ObjectModel
 from contacts.models import Contacts
 from esn.api.serializers.esn import ObjectSerializer, ContectsSerializer
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# class CreateCheckoutSessionView(View):
+#     def post(self, request, *args, **kwargs):
+#         YOUR_DOMAIN = "http://127.0.0.1:8000"
+#         checkout_session = stripe.checkout.Session.create(
+#             payment_method_types = ["card"],
+#             line_items=[
+#                 {
+#                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+#                     'price_data': {
+#                         "currency": "usd",
+#                         "unit_amount": 2000,
+#                         "product_data": {
+#                             "name": "",
+#                         }
+#                     },
+#                     'quantity': 1,
+#                 },
+#             ],
+#             mode='payment',
+#             success_url=YOUR_DOMAIN + '/success/',
+#             cancel_url=YOUR_DOMAIN + '/cancel/',
+#         )
+#         return JsonResponse({
+#
+#         })
 
 class ObjectView(
     generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
@@ -64,7 +95,7 @@ class DebtObjectView(views.APIView):
             return Response(serializer_data, status=status.HTTP_200_OK)
 
         except Exception:
-            return Response("No data", status=status.HTTP_200_OK)
+            return Response("No data", status=status.HTTP_502_BAD_GATEWAY)
 
 
 class AllNetObjects(generics.ListAPIView):
