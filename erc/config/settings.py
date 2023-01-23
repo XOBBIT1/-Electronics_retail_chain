@@ -127,7 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -183,6 +182,7 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TASK_TRACK_STARTED = True
 
+STRIPE_SECRET_KEY=os.environ["STRIPE_SECRET_KEY"]
 
 EMAIL_HOST = os.environ["EMAIL_HOST"]
 EMAIL_PORT = 465
