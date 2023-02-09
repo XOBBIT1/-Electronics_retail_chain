@@ -103,7 +103,7 @@ DATABASES = {
         "NAME": os.environ["POSTGRES_NAME"],
         "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "HOST": "localhost",
+        "HOST": os.environ["POSTGRES_HOST"],
         "PORT": os.environ["POSTGRES_PORT"],
     }
 }
@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-REDIS_HOST = "127.0.0.1"
+REDIS_HOST = os.environ["REDIS_HOST"]
 REDIS_PORT = os.environ["REDIS_PORT"]
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"

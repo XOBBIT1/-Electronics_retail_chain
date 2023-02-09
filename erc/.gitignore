@@ -104,7 +104,7 @@ celerybeat.pid
 
 # Environments
 static
-erc/.env
+.env
 .venv
 .idea
 env/
